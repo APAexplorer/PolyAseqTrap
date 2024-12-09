@@ -7,10 +7,8 @@ PolyAseqTrap is an R package designed to identify and quantify polyA sites from 
 
 * The PolyAseqTrap package consists of six main modules.
 
-<img src="https://github.com/APAexplorer/PolyAseqTrap/blob/main/img/schema.png" alt="schema" width="600"/>
+<img src="https://github.com/APAexplorer/PolyAseqTrap/blob/main/img/schema.png" alt="schema" width="1000"/>
 
-![image](https://github.com/APAexplorer/PolyAseqTrap/blob/main/img/schema.png)
-Figure 1. Schematic diagram of the PolyAseqTrap framework.
 
 Installing scNPF
 =============
