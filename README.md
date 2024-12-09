@@ -5,6 +5,10 @@ About
 ====================
 PolyAseqTrap is an R package designed to identify and quantify polyA sites from various 3′ sequencing datasets (e.g., DRS, PAT-seq, PASC-seq, 3′READS). It utilizes a polyA read prioritization strategy with detailed post-inspection to minimize false polyA site calls and accurately determine their precise locations. Notably, PolyAseqTrap incorporates a transferable, cross-species deep learning model to resolve the persistent challenge of internal priming. Furthermore, it includes a weighted density peak clustering method that considers the microheterogeneity of polyadenylation across species to define polyA site clusters (PACs). The package also provides extensive tools for annotation, validation, and visualization of polyA sites, delivering well-structured reports to facilitate seamless analysis.
 
+* The PolyAseqTrap package consists of six main modules.
+
+<img src="https://github.com/APAexplorer/PolyAseqTrap/blob/main/img/schema.png" alt="schema" width="600"/>
+
 ![image](https://github.com/APAexplorer/PolyAseqTrap/blob/main/img/schema.png)
 Figure 1. Schematic diagram of the PolyAseqTrap framework.
 
