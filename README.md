@@ -10,10 +10,15 @@ PolyAseqTrap is an R package designed to identify and quantify polyA sites from 
 <img src="https://github.com/APAexplorer/PolyAseqTrap/blob/main/img/schema.png" alt="schema" style="width:60%;"/>
 
 **a**. Preprocessing and mapping of 3′ seq data across diverse techniques. 
+
 **b**. Identification and correction of polyA sites. 
+
 **c**. Removing internal priming sites by deep learning. 
+
 **d**. Clustering polyA sites to address species-specific cleavage microheterogeneity. 
+
 **e**. Annotation of polyA sites. 
+
 **f**. Quantitative evaluation of polyA sites. PAS, polyA site; PAC, polyA site cluster; PAR, polyA read; IP, internal priming; UMI, unique molecular identifier.
 
 
