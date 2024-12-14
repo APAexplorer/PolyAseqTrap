@@ -59,6 +59,57 @@ We evaluated PolyAseqTrap against existing 3' sequencing pipelines using data fr
 The demo includes the following, please refer to the vignette ([PDF](https://github.com/APAexplorer/PolyAseqTrap/blob/main/vignettes/PolyAseqTrap_tutorial.pdf), [HTML](https://github.com/APAexplorer/PolyAseqTrap/blob/main/vignettes/PolyAseqTrap_tutorial.html)) for full details.
 * **Preparations**
 * **Identify PACs at varying confidence levels from BAM file**
+  ```
+  library(PolyAseqTrap,  warn.conflicts = FALSE, quietly=TRUE)
+library(BSgenome.Hsapiens.UCSC.hg38)
+bsgenome <-  BSgenome.Hsapiens.UCSC.hg38
+
+# load 3'UTR annotation for detecting V8 polyA site
+threeUTR_path <- system.file("extdata",
+                             "ThreeRegion_Homo_sapiens.Rdata",
+                             package = "PolyAseqTrap")
+threeUTRregion <- readRDS(threeUTR_path)
+
+# get bam file
+bam_T_file <- system.file("extdata",
+                          "SRR299116_T_chr22_hg_sorted.bam",
+                          package = "PolyAseqTrap")
+
+
+# identify and quantify PACs, it wouldn't predict V8 polyA site if 
+# without providing 3'UTR annotation.
+# here "adjust.chr" is set to TRUE to add "chr" prefix
+pa.hg.result <- FindPTA(bam=bam_T_file, 
+        yieldSize=10^7,
+        reverse=F,
+        bsgenome=bsgenome,
+        d=24,
+        poly='T',
+        adjust.chr=TRUE,
+        threeUTRregion=threeUTRregion,
+        cutoffCount = 5,
+        ext3UTRlen =   1000 ,
+        isDRS = FALSE,
+        run.quantify=TRUE)
+# Display details of alignment and category of aligned reads
+rmarkdown::paged_table(head(pa.hg.result$pa.table[,c("readName","cigar","seq",
+                                                     "softClipFragment","trimmed_seq",
+                                                     "unmapped_seq",
+                                                     "reference_seq","is_Arich",
+                                                     "chr","strand","coord",
+                                                     "level","class","use.as.count")]),
+                       options = list(rows.print = 5, cols.print = 5))
+#category of aligned reads
+t(table(pa.hg.result$pa.table$class))
+#subclasses of aligned reads
+t(table(pa.hg.result$pa.table$level))
+
+# Display details of PACs
+rmarkdown::paged_table(head(pa.hg.result$pa.coord),
+                       options = list(rows.print = 5, cols.print = 5)) 
+#filter PACs that were supported by at least five reads
+pac5.hg <- subset(pa.hg.result$pa.coord,total.count>=5)
+  ```
 * **Remove internal priming artifacts**
 * **Mitigating Microheterogeneity in PACs**
 * **Annotate PACs**
