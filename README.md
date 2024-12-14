@@ -61,7 +61,7 @@ The demo includes the following, please refer to the vignette ([PDF](https://git
 * **Identify PACs at varying confidence levels from BAM file**
 
 ```
-  library(PolyAseqTrap,  warn.conflicts = FALSE, quietly=TRUE)
+library(PolyAseqTrap,  warn.conflicts = FALSE, quietly=TRUE)
 library(BSgenome.Hsapiens.UCSC.hg38)
 bsgenome <-  BSgenome.Hsapiens.UCSC.hg38
 
@@ -77,9 +77,7 @@ bam_T_file <- system.file("extdata",
                           package = "PolyAseqTrap")
 
 
-# identify and quantify PACs, it wouldn't predict V8 polyA site if 
-# without providing 3'UTR annotation.
-# here "adjust.chr" is set to TRUE to add "chr" prefix
+# identify and quantify PACs
 pa.hg.result <- FindPTA(bam=bam_T_file, 
         yieldSize=10^7,
         reverse=F,
@@ -92,29 +90,22 @@ pa.hg.result <- FindPTA(bam=bam_T_file,
         ext3UTRlen =   1000 ,
         isDRS = FALSE,
         run.quantify=TRUE)
-# Display details of alignment and category of aligned reads
-rmarkdown::paged_table(head(pa.hg.result$pa.table[,c("readName","cigar","seq",
-                                                     "softClipFragment","trimmed_seq",
-                                                     "unmapped_seq",
-                                                     "reference_seq","is_Arich",
-                                                     "chr","strand","coord",
-                                                     "level","class","use.as.count")]),
-                       options = list(rows.print = 5, cols.print = 5))
-#category of aligned reads
-t(table(pa.hg.result$pa.table$class))
-#subclasses of aligned reads
-t(table(pa.hg.result$pa.table$level))
-
-# Display details of PACs
-rmarkdown::paged_table(head(pa.hg.result$pa.coord),
-                       options = list(rows.print = 5, cols.print = 5)) 
-#filter PACs that were supported by at least five reads
-pac5.hg <- subset(pa.hg.result$pa.coord,total.count>=5)
+head(pa.hg.result)
 ```
 
 
 * **Remove internal priming artifacts**
 * **Mitigating Microheterogeneity in PACs**
 * **Annotate PACs**
-  
+
+```
+## You can also browse the vignette using the following command on the R console
+vignette("PolyAseqTrap_tutorial", package = "PolyAseqTrap")
+```
+
+
+Citation
+=============
+If you are using PolyAseqTrap, please cite [Wenbin Ye, Xin Cheng, and Xiaohui Wu, PolyAseqTrap: a universal tool for genome-wide identification and quantification of polyadenylation sites from different 3’ end sequencing data, 2024)[https://github.com/APAexplorer/PolyAseqTrap]
+]
 
