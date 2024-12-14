@@ -22,20 +22,20 @@ PolyAseqTrap is an R package designed to identify and quantify polyA sites from 
 **f**. Quantitative evaluation of polyA sites. PAS, polyA site; PAC, polyA site cluster; PAR, polyA read; IP, internal priming; UMI, unique molecular identifier.
 
 
-Installing scNPF
+Installing PolyAseqTrap
 =============
 Mandatory 
 ---------
 
-* R (>3.1). [R 3.5](https://www.r-project.org/) is recommended.
+* R (>=4.0.0). [4.3.1 ](https://www.r-project.org/) is recommended.
 
 Required R Packages
 ---------
-* [igraph](https://cran.r-project.org/web/packages/igraph/index.html), [WGCNA](https://cran.r-project.org/web/packages/WGCNA/index.html), [foreach](https://cran.r-project.org/web/packages/foreach/index.html), [doParallel](https://cran.r-project.org/web/packages/doParallel/index.html), [Matrix](https://cran.r-project.org/web/packages/Matrix/index.html), [plyr](https://cran.r-project.org/web/packages/plyr/index.html),  
+* [Rsamtools](https://bioconductor.org/packages/release/bioc/html/Rsamtools.html), [stringr](https://cran.r-project.org/web/packages/stringr/index.html), [plyr](https://cran.r-project.org/web/packages/plyr/index.html), [Biostrings](https://bioconductor.org/packages/release/bioc/html/Biostrings.html), [dplyr](https://cran.r-project.org/web/packages/dplyr/index.html), [GenomicRanges](https://bioconductor.org/packages/release/bioc/html/GenomicRanges.html), [IRanges](https://bioconductor.org/packages/release/bioc/html/IRanges.html), [BiocGenerics](https://bioconductor.org/packages/release/bioc/html/BiocGenerics.html), [tibble](https://cran.r-project.org/web/packages/tibble/index.html), [outliers](https://cran.r-project.org/web/packages/outliers/index.html), [pbmcapply](https://cran.r-project.org/web/packages/pbmcapply/index.html), [limma](https://bioconductor.org/packages/release/bioc/html/limma.html), [methods](https://cran.r-project.org/web/packages/R.methodsS3/index.html)
 
 Suggested R Packages
 ---------
-* [gplots](https://cran.r-project.org/web/packages/gplots/index.html), [RColorBrewer](https://cran.r-project.org/web/packages/RColorBrewer/index.html),  
+* [movAPA](https://github.com/BMILAB/movAPA), [ggplot2](https://cran.r-project.org/web/packages/ggplot2/index.html), [data.table](https://cran.r-project.org/web/packages/data.table/index.html), [knitr](https://cran.r-project.org/web/packages/knitr/index.html), [rmarkdown](https://cran.r-project.org/web/packages/rmarkdown/index.html)
 
 Installation
 ---------
@@ -43,8 +43,24 @@ Installation
 ```
 install.packages("devtools")
 library(devtools)
-install_github("BMILAB/scNPF")
-library(scNPF)
+install_github("APAexplorer/PolyAseqTrap")
+library(PolyAseqTrap)
+
+browseVignettes("PolyAseqTrap")
+vignette("PolyAseqTrap_tutorial", package = "PolyAseqTrap")
+
+##or you can download ZIP, and then unzip
+devtools::install_local("your_path_of_PolyAseqTrap-master.zip", build_vignettes = TRUE)
 ```
 
+Application examples
+=============
+We evaluated PolyAseqTrap against existing 3' sequencing pipelines using data from 16 different 3' sequencing techniques across multiple species. This comprehensive evaluation demonstrates the effectiveness and robustness of PolyAseqTrap. In this guide, we use demo data from three species—human, mouse, and Arabidopsis to illustrate how PolyAseqTrap can be applied for unified and user-friendly polyA site identification and analysis across different types of 3' sequencing data.
+The demo includes the following, please refer to the vignette ([PDF](https://github.com/APAexplorer/PolyAseqTrap/blob/main/vignettes/PolyAseqTrap_tutorial.pdf), [HTML](https://github.com/APAexplorer/PolyAseqTrap/blob/main/vignettes/PolyAseqTrap_tutorial.html)) for full details.
+* **Preparations**
+* **Identify PACs at varying confidence levels from BAM file**
+* **Remove internal priming artifacts**
+* **Mitigating Microheterogeneity in PACs**
+* **Annotate PACs**
+  
 
