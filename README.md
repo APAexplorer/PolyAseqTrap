@@ -59,7 +59,8 @@ We evaluated PolyAseqTrap against existing 3' sequencing pipelines using data fr
 The demo includes the following, please refer to the vignette ([PDF](https://github.com/APAexplorer/PolyAseqTrap/blob/main/vignettes/PolyAseqTrap_tutorial.pdf), [HTML](https://github.com/APAexplorer/PolyAseqTrap/blob/main/vignettes/PolyAseqTrap_tutorial.html)) for full details.
 * **Preparations**
 * **Identify PACs at varying confidence levels from BAM file**
-  ```
+
+```
   library(PolyAseqTrap,  warn.conflicts = FALSE, quietly=TRUE)
 library(BSgenome.Hsapiens.UCSC.hg38)
 bsgenome <-  BSgenome.Hsapiens.UCSC.hg38
@@ -109,7 +110,9 @@ rmarkdown::paged_table(head(pa.hg.result$pa.coord),
                        options = list(rows.print = 5, cols.print = 5)) 
 #filter PACs that were supported by at least five reads
 pac5.hg <- subset(pa.hg.result$pa.coord,total.count>=5)
-  ```
+```
+
+
 * **Remove internal priming artifacts**
 * **Mitigating Microheterogeneity in PACs**
 * **Annotate PACs**
