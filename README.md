@@ -106,6 +106,6 @@ vignette("PolyAseqTrap_tutorial", package = "PolyAseqTrap")
 
 Citation
 =============
-If you are using PolyAseqTrap, please cite [Wenbin Ye, Xin Cheng, and Xiaohui Wu, PolyAseqTrap: a universal tool for genome-wide identification and quantification of polyadenylation sites from different 3’ end sequencing data, 2024)[https://github.com/APAexplorer/PolyAseqTrap]
+If you are using PolyAseqTrap, please cite [Wenbin Ye, Xin Cheng, and Xiaohui Wu, PolyAseqTrap: a universal tool for genome-wide identification and quantification of polyadenylation sites from different 3’ end sequencing data, 2024](https://github.com/APAexplorer/PolyAseqTrap)
 ]
 
