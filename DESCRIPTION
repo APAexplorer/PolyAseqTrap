@@ -5,7 +5,7 @@ Version: 0.1.0
 Author: Wenbin Ye, Xin Cheng and Xiaohui Wu
 Maintainer: Wenbin Ye <nikou123456@outlook.com>
 Description: This package provides functions for identifying and quantifying polyA sites from different 3’ seq data.
-License: GPL
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
 Depends: R (>= 4.0.0)
