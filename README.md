@@ -46,8 +46,7 @@ library(devtools)
 install_github("APAexplorer/PolyAseqTrap")
 library(PolyAseqTrap)
 
-browseVignettes("PolyAseqTrap")
-vignette("PolyAseqTrap_tutorial", package = "PolyAseqTrap")
+browseURL("https://apaexplorer.github.io/PolyAseqTrap/vignettes/PolyAseqTrap_tutorial.html")
 
 ##or you can download ZIP, and then unzip
 devtools::install_local("your_path_of_PolyAseqTrap-master.zip", build_vignettes = TRUE)
