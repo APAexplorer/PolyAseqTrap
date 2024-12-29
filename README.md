@@ -97,10 +97,56 @@ head(pa.hg.result)
 * **Mitigating Microheterogeneity in PACs**
 * **Annotate PACs**
 
+* **Summary report**
+  
 ```
-## You can also browse the vignette using the following command on the R console
-vignette("PolyAseqTrap_tutorial", package = "PolyAseqTrap")
+library(PolyAseqTrap,  warn.conflicts = FALSE, quietly=TRUE)
+library(ggplot2)
+library("BSgenome.Hsapiens.UCSC.hg38", quietly = TRUE)
+library(movAPA, warn.conflicts = FALSE, quietly=TRUE)
+library(ggpubr)
+bsgenome <-BSgenome.Hsapiens.UCSC.hg38
+data(data.PACds)
+faFiles=faFromPACds(data.PACds, bsgenome, what='updn', fapre='updn', 
+                    up=-100, dn=100,byGrp='ftr')
+
+## plot single nucleotide profiles for 3'UTR PACs
+plotATCGforFAfile("updn.3UTR.fa", ofreq=FALSE, opdf=FALSE, 
+                  refPos=101, mergePlots = TRUE)
+
+
+## calculate a chi-square metric to assess the similarity between the single nucleotide profile of identified polyA sites and the reference profile
+# load reference PACs profile
+data(ref.data)
+
+#This demonstrates functionality with 10 iterations and 200 random PACs. Larger parameters are recommended (e.g., iteration = 100, use.size = 5000)
+chisq.result <- cal.chisq(fafile="updn.3UTR.fa",ref.data=ref.data,
+                          iteration=10,use.size=200)
+statistic <- as.numeric(unlist(chisq.result$statistic))  
+summary(statistic )
+#Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#8.219   8.878   8.957   8.997   9.261   9.589 
+
+boxplot(statistic ,col="orange",
+        ylab = "Chi-squared metric",
+        border = "brown"
+)
+
+## plot distributions of PACs across different categories, subclasses, genomic features, and polyA signals
+data.PACds@anno$coord_class <- factor(data.PACds@anno$coord_level,                            
+          levels=c("V1","V2","V3","V4","V5","V6","V7","V8","Count"),
+        labels= c("C1","C1","C2","C2","C1","C2","C2","C3","Count"))
+
+p<- plot_summary(data=data.PACds@anno)
+ggarrange(p$p1,p$p2,p$p3,p$p4,    labels = c("A", "B", "C","D"))
+
 ```
+
+
+The summary report provides an overview of PACs at different levels, including their genomics region and length distributions, signal distribution, and nucleotide frequency distribution. It helps users quickly understand the predicted results by displaying the classification of PACs into categories (C1, C2, C3) and further subdividing them into subclasses (V1 to V8) based on polyA tail length, base composition, and alignment results. Additionally, chi-square values are provided to assess the similarity between identified PACs and reference sequences.
+
+<img src="https://github.com/BMILAB/APAexplorer/blob/main/img/features.png" alt="features" style="width:60%;"/>
+
 
 
 Citation
