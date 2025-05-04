@@ -3,9 +3,9 @@ A universal tool for genome-wide identification and quantification of polyadenyl
 
 About
 ====================
-PolyAseqTrap is an R package designed to identify and quantify polyA sites from various 3′ sequencing datasets (e.g., DRS, PAT-seq, PASC-seq, 3′READS). It utilizes a polyA read prioritization strategy with detailed post-inspection to minimize false polyA site calls and accurately determine their precise locations. Notably, PolyAseqTrap incorporates **[DeepIP](https://github.com/APAexplorer/DeepIP)**, a transferable, cross-species deep learning model to resolve the persistent challenge of internal priming. Furthermore, it includes a weighted density peak clustering method that considers the microheterogeneity of polyadenylation across species to define polyA site clusters (PACs). The package also provides extensive tools for annotation, validation, and visualization of polyA sites, delivering well-structured reports to facilitate seamless analysis.
+PolyAseqTrap is an R package designed to identify and quantify polyA sites from various 3′ sequencing datasets (e.g., DRS, PAT-seq, PASC-seq, 3′READS). It utilizes a polyA read prioritization strategy with detailed post-inspection to minimize false polyA site calls and accurately determine their precise locations. Notably, PolyAseqTrap incorporates **[DeepIP](https://github.com/APAexplorer/DeepIP_R)**, a transferable, cross-species deep learning model to resolve the persistent challenge of internal priming. Furthermore, it includes a weighted density peak clustering method that considers the microheterogeneity of polyadenylation across species to define polyA site clusters (PACs). The package also provides extensive tools for annotation, validation, and visualization of polyA sites, delivering well-structured reports to facilitate seamless analysis.
 
-**Note:** For detailed information about **DeepIP**, please refer to its GitHub repository: [DeepIP_R version](https://github.com/APAexplorer/DeepIP_R) or [DeepIP](https://github.com/APAexplorer/DeepIP).
+**Note:** For detailed information about **DeepIP**, please refer to its GitHub repository: **[DeepIP_R version](https://github.com/APAexplorer/DeepIP_R)** or **[DeepIP](https://github.com/APAexplorer/DeepIP)**.
 
 * The PolyAseqTrap package consists of six main modules.
 
