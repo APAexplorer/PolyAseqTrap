@@ -93,7 +93,8 @@ pa.hg.result <- FindPTA(bam=bam_T_file,
         cutoffCount = 5,
         ext3UTRlen =   1000 ,
         isDRS = FALSE,
-        run.quantify=TRUE)
+        run.quantify=TRUE,
+        detect.repeat=TRUE)
 head(pa.hg.result)
 ```
 
