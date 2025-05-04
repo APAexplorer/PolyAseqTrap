@@ -15,7 +15,7 @@ PolyAseqTrap is an R package designed to identify and quantify polyA sites from 
 
 **b**. Identification and correction of polyA sites. 
 
-**c**. Removing internal priming sites by deep learning. 
+**c**. Removing internal priming sites by a deep learning model (called DeepIP).  For detailed information about **DeepIP**, please refer to its GitHub repository: **[DeepIP_R version](https://github.com/APAexplorer/DeepIP_R)** or **[DeepIP](https://github.com/APAexplorer/DeepIP)**.
 
 **d**. Clustering polyA sites to address species-specific cleavage microheterogeneity. 
 
