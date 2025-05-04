@@ -1,5 +1,5 @@
 library(reticulate) 
-use_condaenv("/path/anaconda3/envs/DeepPASTA/")
+use_condaenv("/path/miniconda3/envs/DeepIP/")
 setwd('/path/polyAseqTrap/DeepIP_path/')
 ## --------- train_1w on test.all.fa --------
 ##Test data: test.all.fa, length 200, with PA located at position 101.
