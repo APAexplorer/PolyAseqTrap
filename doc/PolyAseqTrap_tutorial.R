@@ -72,7 +72,7 @@ bsgenome <- BSgenome.Athaliana.ENSEMBL.TAIR10
 #  saveRDS(gff,file="Ensembl_Mus_musculus.GRCm39.110.Rdata")
 #  threeUTR.data <-subset(gff$anno.need,type=="three_prime_UTR")
 #  threeUTRregion <- makeGRangesFromDataFrame(threeUTR.data,keep.extra.columns = F)
-#  save
+#  saveRDS(threeUTRregion,file="ThreeRegion_Mus_musculus.Rdata")
 
 ## ----bsgenome_tair, message=FALSE,eval=FALSE----------------------------------
 #  library(movAPA)
@@ -115,7 +115,8 @@ pa.hg.result <- FindPTA(bam=bam_T_file,
         cutoffCount = 5,
         ext3UTRlen =   1000 ,
         isDRS = FALSE,
-        run.quantify=TRUE)
+        run.quantify=TRUE,
+        detect.repeat=TRUE)
 # Display details of alignment and category of aligned reads
 rmarkdown::paged_table(head(pa.hg.result$pa.table[,c("readName","cigar","seq",
                                                      "softClipFragment","trimmed_seq",
@@ -134,6 +135,8 @@ rmarkdown::paged_table(head(pa.hg.result$pa.coord),
                        options = list(rows.print = 5, cols.print = 5)) 
 #filter PACs that were supported by at least five reads
 pac5.hg <- subset(pa.hg.result$pa.coord,total.count>=5)
+# Filter PACs whose representative polyA sites are not located in A-rich repeat regions.For polyA sites located in intronic regions, it is recommended to filter out those in repeat regions.
+pac5.hg.clean <- subset(pac5.hg, !repeat_flag)
 
 ## ----message=FALSE, eval=FALSE------------------------------------------------
 #  library(PolyAseqTrap, warn.conflicts = FALSE, quietly=TRUE)
@@ -164,10 +167,11 @@ pac5.hg <- subset(pa.hg.result$pa.coord,total.count>=5)
 #                          cutoffCount = 5,
 #                          ext3UTRlen =   1000 ,
 #                          isDRS = FALSE,
-#                          run.quantify=TRUE)
+#                          run.quantify=TRUE,
+#                          detect.repeat=TRUE)
 #  # Display details of alignment and category of aligned reads
 #  rmarkdown::paged_table(head(pa.hg.result$pa.table[,c("readName","cigar","seq",
-#                                                       "softClipFragment","trimmed_seq",
+#                                                               "softClipFragment","trimmed_seq",
 #                                                       "unmapped_seq",
 #                                                       "reference_seq","is_Arich",
 #                                                       "chr","strand","coord",
@@ -183,6 +187,8 @@ pac5.hg <- subset(pa.hg.result$pa.coord,total.count>=5)
 #                         options = list(rows.print = 5, cols.print = 5))
 #  #filter PACs that were supported by at least five reads
 #  pac5.hg <- subset(pa.hg.result$pa.coord,total.count>=5)
+#  # Filter PACs whose representative polyA sites are not located in A-rich repeat regions.For polyA sites located in intronic regions, it is recommended to filter out those in repeat regions.
+#  pac5.hg.clean <- subset(pac5.hg, !repeat_flag)
 
 ## ----message=FALSE, warning=FALSE---------------------------------------------
 library(PolyAseqTrap,  warn.conflicts = FALSE, quietly=TRUE)
@@ -211,7 +217,8 @@ pa.mm.result <- FindPTA(bam=bam_T_file,
                         cutoffCount = 5,
                         ext3UTRlen =   1000 ,
                         isDRS = FALSE,
-                        run.quantify=TRUE)
+                        run.quantify=TRUE,
+                        detect.repeat=TRUE)
 
 
 # Display details of alignment and category of aligned reads
@@ -232,6 +239,8 @@ rmarkdown::paged_table(head(pa.mm.result$pa.coord),
                        options = list(rows.print = 5, cols.print = 5)) 
 #filter PACs that were supported by at least five reads
 pac5.mm <- subset(pa.mm.result$pa.coord,total.count>=5)
+# Filter PACs whose representative polyA sites are not located in A-rich repeat regions.  For polyA sites located in intronic regions, it is recommended to filter out those in repeat regions.
+pac5.mm.clean <- subset(pac5.mm, !repeat_flag)
 
 ## ----message=FALSE, warning=FALSE---------------------------------------------
 library(PolyAseqTrap, warn.conflicts = FALSE, quietly=TRUE)
@@ -261,11 +270,12 @@ pa.tair.result <- FindPTA(bam=bam_T_file,
                           cutoffCount = 5,
                           ext3UTRlen =   1000 ,
                           isDRS = FALSE,
-                          run.quantify=TRUE)
+                          run.quantify=TRUE,
+                          detect.repeat=TRUE)
 
 # Display details of alignment and category of aligned reads
 rmarkdown::paged_table(head(pa.tair.result$pa.table[,c("readName","cigar","seq",
-                                                       "softClipFragment","trimmed_seq",
+                   "softClipFragment","trimmed_seq",
                                                        "unmapped_seq",
                                                        "reference_seq","is_Arich",
                                                        "chr","strand","coord",
@@ -281,6 +291,8 @@ rmarkdown::paged_table(head(pa.tair.result$pa.coord),
                        options = list(rows.print = 5, cols.print = 5)) 
 #filter PACs that were supported by at least five reads
 pac5.tair<- subset(pa.tair.result$pa.coord,total.count>=5)
+# Filter PACs whose representative polyA sites are not located in A-rich repeat regions.For polyA sites located in intronic regions, it is recommended to filter out those in repeat regions.
+pac5.tair.clean <- subset(pac5.tair, !repeat_flag)
 
 ## ----message=FALSE, eval=FALSE------------------------------------------------
 #  library(reticulate)
@@ -348,13 +360,13 @@ pac5.tair<- subset(pa.tair.result$pa.coord,total.count>=5)
 #  # remove internal priming artifacts
 #  PACs_human$pa.table$level[index] <- "Count"
 #  PACs_human$pa.table$level <- factor( PACs_human$pa.table$level,
-#                                       levels=c("V1","V2","V3","V4","V5","V6","V7","V8","Count"))
+#          levels=c("V1","V2","V3","V4","V5","V6","V7","V8","Count"))
 #  
 #  
 #  ## regroup nearby cleavage sites
 #  PACs_human <- resut.PA(aln.result=PACs_human$pa.table,d=24)
 
-## ----message=FALSE------------------------------------------------------------
+## ----message=FALSE, warning=FALSE---------------------------------------------
 library(PolyAseqTrap, warn.conflicts = FALSE, quietly=TRUE)
 ## load identified PACs in Arabidopsis genome generated by FindPTA function
 data("PACs_tair")
@@ -396,12 +408,17 @@ ggplot(width.density, aes(x=pac.width,color=type,fill=type)) +
 #  library("BSgenome.Hsapiens.UCSC.hg38", quietly = TRUE)
 #  library(movAPA, warn.conflicts = FALSE, quietly=TRUE)
 #  bsgenome <-BSgenome.Hsapiens.UCSC.hg38
-#  
 #  athGFF <- "Homo_sapiens.GRCh38.110.gtf"
 #  annotation <- parseGff(athGFF)
 #  
 #  # load identified PACs in human genome using FindPTA function
 #  data(PACs_human)
+#  
+#  #to check whether the representative polyA site is located in a repeat region
+#  #For polyA sites located in intronic regions, it is recommended to filter out those in repeat regions
+#  PACs_human$pa.coord <-  check.repeat(pac.result=PACs_human$pa.coord,
+#                                       bsgenome =bsgenome )
+#  
 #  colnames(PACs_human$pa.coord)[1:3] <- c("chr","UPA_start","UPA_end")
 #  data.PACds <- readPACds(PACs_human$pa.coord, colDataFile=NULL)
 #  # annotate PAC
@@ -422,7 +439,60 @@ ggplot(width.density, aes(x=pac.width,color=type,fill=type)) +
 #  table(data.PACds@anno$ftr)
 #  #3UTR       5UTR       exon intergenic     intron
 #  #941          1         54        608        589
-#  }
+#  
+#  # For intonic PACs, it is recommended to filter out those in repeat regions
+#  ipa.result <- subset(data.PACds@anno,ftr=="intron"&repeat_flag==FALSE)
+#  save(data.PACds,file="data.PACds.rda")
+#  
+
+## ----message=FALSE,eval=FALSE-------------------------------------------------
+#  library(ggplot2)
+#  library("BSgenome.Hsapiens.UCSC.hg38", quietly = TRUE)
+#  library(movAPA, warn.conflicts = FALSE, quietly=TRUE)
+#  library(ggpubr)
+#  bsgenome <-BSgenome.Hsapiens.UCSC.hg38
+#  data(data.PACds)
+#  faFiles=faFromPACds(data.PACds, bsgenome, what='updn', fapre='updn',
+#                      up=-100, dn=100,byGrp='ftr')
+#  #608 >>> updn.intergenic.fa
+#  #589 >>> updn.intron.fa
+#  #941 >>> updn.3UTR.fa
+#  #54 >>> updn.exon.fa
+#  #1 >>> updn.5UTR.fa
+#  
+#  ##plot single nucleotide profiles for 3'UTR PACs
+#  plotATCGforFAfile("updn.3UTR.fa", ofreq=FALSE, opdf=FALSE,
+#                    refPos=101, mergePlots = TRUE)
+#  
+#  
+#  ##calculate a chi-square metric to assess the similarity between the single nucleotide profile of identified polyA sites and the reference profile
+#  #load reference PACs profile
+#  data(ref.data)
+#  
+#  #This demonstrates functionality with 10 iterations and 200 random PACs. Larger parameters are recommended (e.g., iteration = 100, use.size = 5000)
+#  chisq.result <- cal.chisq(fafile="updn.3UTR.fa",ref.data=ref.data,
+#                            iteration=10,use.size=200)
+#  statistic <- as.numeric(unlist(chisq.result$statistic))
+#  summary(statistic )
+#  #Min. 1st Qu.  Median    Mean 3rd Qu.    Max.
+#  #8.219   8.878   8.957   8.997   9.261   9.589
+#  
+#  boxplot(statistic ,col="orange",
+#          ylab = "Chi-squared metric",
+#          border = "brown"
+#  )
+#  
+#  ##plot distributions of PACs across different categories, subclasses, genomic features, and polyA signals
+#  data.PACds@anno$coord_class <- factor(data.PACds@anno$coord_level,
+#            levels=c("V1","V2","V3","V4","V5","V6","V7","V8","Count"),
+#          labels= c("C1","C1","C2","C2","C1","C2","C2","C3","Count"))
+#  
+#  p<- plot_summary(data=data.PACds@anno)
+#  ggarrange(p$p1,p$p2,p$p3,p$p4,    labels = c("A", "B", "C","D"))
+#  
+
+## ----echo=FALSE, fig.cap="Distribution of PACs" ,out.width="70%"--------------
+knitr::include_graphics("/Users/sevenye/Desktop/Project_Desk/polyAseqTrap/github/refer/features.png")
 
 ## -----------------------------------------------------------------------------
 sessionInfo()
