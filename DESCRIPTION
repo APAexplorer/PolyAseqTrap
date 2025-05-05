@@ -8,8 +8,9 @@ Description: This package provides functions for identifying and quantifying pol
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
+LazyDataCompression: xz
 Depends: R (>= 4.0.0)
-Imports: Rsamtools, stringr, plyr, Biostrings, dplyr, GenomicRanges, IRanges, BiocGenerics, tibble, outliers, pbmcapply, limma, methods
+Imports: Rsamtools, stringr, plyr, Biostrings, dplyr, GenomicRanges, IRanges, BiocGenerics, tibble, outliers, pbmcapply, limma, methods, stringdist
 Suggests: movAPA, ggplot2, data.table, knitr, rmarkdown
 RoxygenNote: 7.2.3
 VignetteBuilder: knitr
