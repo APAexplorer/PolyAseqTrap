@@ -1,10 +1,8 @@
 ---
 title: "Identification and quantification of polyA sites from different 3'end seq data with the PolyAseqTrap package"
 author: "Wenbin Ye, Xin Cheng, Xiaohui Wu"
-date: "2024-12-12"
+date: "2025-05-04"
 output:
-  rmarkdown::html_document: 
-    toc: yes    
   rmarkdown::pdf_document:
     latex_engine: xelatex
     toc:  true
@@ -12,6 +10,8 @@ output:
     number_sections: true
     fig_width: 5
     fig_height: 4
+  rmarkdown::html_document: 
+    toc: yes    
 vignette: >
   %\VignetteIndexEntry{PolyAseqTrap_tutorial}
   %\VignetteEncoding{UTF-8}
@@ -163,7 +163,7 @@ gff<- parseGff(athGFF)
 saveRDS(gff,file="Ensembl_Mus_musculus.GRCm39.110.Rdata")
 threeUTR.data <-subset(gff$anno.need,type=="three_prime_UTR")
 threeUTRregion <- makeGRangesFromDataFrame(threeUTR.data,keep.extra.columns = F)
-save
+saveRDS(threeUTRregion,file="ThreeRegion_Mus_musculus.Rdata")
 ```
 
 * <span style="color: blue;"> **for Arabidopsis (TAIR10)**</span>
@@ -229,7 +229,8 @@ pa.hg.result <- FindPTA(bam=bam_T_file,
         cutoffCount = 5,
         ext3UTRlen =   1000 ,
         isDRS = FALSE,
-        run.quantify=TRUE)
+        run.quantify=TRUE,
+        detect.repeat=TRUE)
 # Display details of alignment and category of aligned reads
 rmarkdown::paged_table(head(pa.hg.result$pa.table[,c("readName","cigar","seq",
                                                      "softClipFragment","trimmed_seq",
@@ -248,6 +249,8 @@ rmarkdown::paged_table(head(pa.hg.result$pa.coord),
                        options = list(rows.print = 5, cols.print = 5)) 
 #filter PACs that were supported by at least five reads
 pac5.hg <- subset(pa.hg.result$pa.coord,total.count>=5)
+# Filter PACs whose representative polyA sites are not located in A-rich repeat regions.For polyA sites located in intronic regions, it is recommended to filter out those in repeat regions.
+pac5.hg.clean <- subset(pac5.hg, !repeat_flag)
 ```
 
 
@@ -283,10 +286,11 @@ pa.hg.result <- FindPTA(bam=bam_A_file,
                         cutoffCount = 5,
                         ext3UTRlen =   1000 ,
                         isDRS = FALSE,
-                        run.quantify=TRUE)
+                        run.quantify=TRUE,
+                        detect.repeat=TRUE)
 # Display details of alignment and category of aligned reads
 rmarkdown::paged_table(head(pa.hg.result$pa.table[,c("readName","cigar","seq",
-                                                     "softClipFragment","trimmed_seq",
+                                                             "softClipFragment","trimmed_seq",
                                                      "unmapped_seq",
                                                      "reference_seq","is_Arich",
                                                      "chr","strand","coord",
@@ -302,6 +306,8 @@ rmarkdown::paged_table(head(pa.hg.result$pa.coord),
                        options = list(rows.print = 5, cols.print = 5)) 
 #filter PACs that were supported by at least five reads
 pac5.hg <- subset(pa.hg.result$pa.coord,total.count>=5)
+# Filter PACs whose representative polyA sites are not located in A-rich repeat regions.For polyA sites located in intronic regions, it is recommended to filter out those in repeat regions.
+pac5.hg.clean <- subset(pac5.hg, !repeat_flag)
 ```
 
 ## Identify PACs in mouse genome 
@@ -336,7 +342,8 @@ pa.mm.result <- FindPTA(bam=bam_T_file,
                         cutoffCount = 5,
                         ext3UTRlen =   1000 ,
                         isDRS = FALSE,
-                        run.quantify=TRUE)
+                        run.quantify=TRUE,
+                        detect.repeat=TRUE)
 
 
 # Display details of alignment and category of aligned reads
@@ -357,6 +364,8 @@ rmarkdown::paged_table(head(pa.mm.result$pa.coord),
                        options = list(rows.print = 5, cols.print = 5)) 
 #filter PACs that were supported by at least five reads
 pac5.mm <- subset(pa.mm.result$pa.coord,total.count>=5)
+# Filter PACs whose representative polyA sites are not located in A-rich repeat regions.  For polyA sites located in intronic regions, it is recommended to filter out those in repeat regions.
+pac5.mm.clean <- subset(pac5.mm, !repeat_flag)
 ```
 
 
@@ -391,11 +400,12 @@ pa.tair.result <- FindPTA(bam=bam_T_file,
                           cutoffCount = 5,
                           ext3UTRlen =   1000 ,
                           isDRS = FALSE,
-                          run.quantify=TRUE)
+                          run.quantify=TRUE,
+                          detect.repeat=TRUE)
 
 # Display details of alignment and category of aligned reads
 rmarkdown::paged_table(head(pa.tair.result$pa.table[,c("readName","cigar","seq",
-                                                       "softClipFragment","trimmed_seq",
+                   "softClipFragment","trimmed_seq",
                                                        "unmapped_seq",
                                                        "reference_seq","is_Arich",
                                                        "chr","strand","coord",
@@ -411,10 +421,14 @@ rmarkdown::paged_table(head(pa.tair.result$pa.coord),
                        options = list(rows.print = 5, cols.print = 5)) 
 #filter PACs that were supported by at least five reads
 pac5.tair<- subset(pa.tair.result$pa.coord,total.count>=5)
+# Filter PACs whose representative polyA sites are not located in A-rich repeat regions.For polyA sites located in intronic regions, it is recommended to filter out those in repeat regions.
+pac5.tair.clean <- subset(pac5.tair, !repeat_flag)
 ```
 
 # Remove internal priming artifacts
 Inspired by the **DeepPASTA** model ([Arefeen, et al., 2019](#1)) that predicts polyA sites from DNA sequences, we designed a deep learning model called DeepIP to predict internal priming artifacts from A-rich polyA sites. DeepIP utilizes both convolutional neural network (CNN) and recurrent neural network (RNN). CNN extracts features from sequences, and RNN is used to combine the extracted feature effects for predicting internal priming artifacts.The corresponding DeepIP scripts are available in the PolyAseqTrap GitHub repository.
+
+**Note:** For detailed information about **DeepIP**, please refer to its GitHub repository: **[DeepIP_R version](https://github.com/APAexplorer/DeepIP_R)** or **[DeepIP](https://github.com/APAexplorer/DeepIP)**.
 
 ## Install DeepIP
 DeepIP can run on both Linux, and Windows, systems. To install and use DeepIP, you need to have [Conda](https://anaconda.org/anaconda/conda) installed on your machine. Please follow the steps below to set up DeepIP:
@@ -562,7 +576,7 @@ index <- which(PACs_human$pa.table$label %in% ip.table$title)
 # remove internal priming artifacts
 PACs_human$pa.table$level[index] <- "Count"
 PACs_human$pa.table$level <- factor( PACs_human$pa.table$level,
-                                     levels=c("V1","V2","V3","V4","V5","V6","V7","V8","Count"))
+        levels=c("V1","V2","V3","V4","V5","V6","V7","V8","Count"))
                               
                                 
 ## regroup nearby cleavage sites
@@ -575,7 +589,7 @@ PACs_human <- resut.PA(aln.result=PACs_human$pa.table,d=24)
 Eukaryotic cleavage and polyadenylation processes exhibit considerable microheterogeneity, with plants showing higher variability than animals ([Ye, et al., 2021](#1)). Traditional methods often struggle to accurately identify distinct PACs due to overlapping regions. To address this, PolyAseqTrap integrates a density peak clustering algorithm, inspired by the [QuantifyPoly(A)](https://sourceforge.net/projects/quantifypoly-a/) method, to mitigate microheterogeneity and improve the accuracy of PAC identification. 
 
 Here, we demonstrate this approach using Arabidopsis as an example, showcasing how it refines PAC determination and reduces the impact of microheterogeneity in plant species. 
-```{r message=FALSE}
+```{r message=FALSE, warning=FALSE}
 library(PolyAseqTrap, warn.conflicts = FALSE, quietly=TRUE)
 ## load identified PACs in Arabidopsis genome generated by FindPTA function
 data("PACs_tair")
@@ -623,12 +637,17 @@ library(PolyAseqTrap, warn.conflicts = FALSE, quietly=TRUE)
 library("BSgenome.Hsapiens.UCSC.hg38", quietly = TRUE)
 library(movAPA, warn.conflicts = FALSE, quietly=TRUE)
 bsgenome <-BSgenome.Hsapiens.UCSC.hg38
-
 athGFF <- "Homo_sapiens.GRCh38.110.gtf"
 annotation <- parseGff(athGFF)
 
 # load identified PACs in human genome using FindPTA function
 data(PACs_human)
+
+#to check whether the representative polyA site is located in a repeat region
+#For polyA sites located in intronic regions, it is recommended to filter out those in repeat regions
+PACs_human$pa.coord <-  check.repeat(pac.result=PACs_human$pa.coord,
+                                     bsgenome =bsgenome )
+
 colnames(PACs_human$pa.coord)[1:3] <- c("chr","UPA_start","UPA_end")
 data.PACds <- readPACds(PACs_human$pa.coord, colDataFile=NULL)
 # annotate PAC
@@ -650,6 +669,8 @@ table(data.PACds@anno$ftr)
 #3UTR       5UTR       exon intergenic     intron 
 #941          1         54        608        589 
 
+# For intonic PACs, it is recommended to filter out those in repeat regions
+ipa.result <- subset(data.PACds@anno,ftr=="intron"&repeat_flag==FALSE)
 save(data.PACds,file="data.PACds.rda")
 
 ```

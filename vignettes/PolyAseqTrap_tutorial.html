@@ -11,7 +11,7 @@
 
 <meta name="author" content="Wenbin Ye, Xin Cheng, Xiaohui Wu" />
 
-<meta name="date" content="2024-12-12" />
+<meta name="date" content="2025-05-04" />
 
 <title>Identification and quantification of polyA sites from different 3’end seq data with the PolyAseqTrap package</title>
 
@@ -1624,7 +1624,7 @@ display: none;
 <h1 class="title toc-ignore">Identification and quantification of polyA
 sites from different 3’end seq data with the PolyAseqTrap package</h1>
 <h4 class="author">Wenbin Ye, Xin Cheng, Xiaohui Wu</h4>
-<h4 class="date">2024-12-12</h4>
+<h4 class="date">2025-05-04</h4>
 
 </div>
 
@@ -1837,7 +1837,7 @@ gff&lt;- parseGff(athGFF)
 saveRDS(gff,file=&quot;Ensembl_Mus_musculus.GRCm39.110.Rdata&quot;)
 threeUTR.data &lt;-subset(gff$anno.need,type==&quot;three_prime_UTR&quot;)
 threeUTRregion &lt;- makeGRangesFromDataFrame(threeUTR.data,keep.extra.columns = F)
-save</code></pre>
+saveRDS(threeUTRregion,file=&quot;ThreeRegion_Mus_musculus.Rdata&quot;)</code></pre>
 <ul>
 <li><span style="color: blue;"> <strong>for Arabidopsis
 (TAIR10)</strong></span></li>
@@ -1919,7 +1919,8 @@ pa.hg.result &lt;- FindPTA(bam=bam_T_file,
         cutoffCount = 5,
         ext3UTRlen =   1000 ,
         isDRS = FALSE,
-        run.quantify=TRUE)
+        run.quantify=TRUE,
+        detect.repeat=TRUE)
 #&gt; [1] &quot;The program is reading the BAM files.&quot;
 #&gt; [1] &quot;Extract reference sequence around polyA coordinate.&quot;
 #&gt; [1] &quot;Detecting reads with polyA tail and adjust polyA coordinate&quot;
@@ -1968,11 +1969,13 @@ rmarkdown::paged_table(head(pa.hg.result$pa.coord),
                        options = list(rows.print = 5, cols.print = 5)) </code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["seqnames"],"name":[1],"type":["fct"],"align":["left"]},{"label":["start"],"name":[2],"type":["int"],"align":["right"]},{"label":["end"],"name":[3],"type":["int"],"align":["right"]},{"label":["width"],"name":[4],"type":["int"],"align":["right"]},{"label":["strand"],"name":[5],"type":["fct"],"align":["left"]},{"label":["coord"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["coord_readName"],"name":[7],"type":["chr"],"align":["left"]},{"label":["coord_unmappedA"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["coord_level"],"name":[9],"type":["fct"],"align":["left"]},{"label":["UPA_coord"],"name":[10],"type":["chr"],"align":["left"]},{"label":["UPA_readName"],"name":[11],"type":["chr"],"align":["left"]},{"label":["UPA_unmappedA"],"name":[12],"type":["chr"],"align":["left"]},{"label":["UPA_level"],"name":[13],"type":["chr"],"align":["left"]},{"label":["PAid"],"name":[14],"type":["chr"],"align":["left"]},{"label":["total.count"],"name":[15],"type":["dbl"],"align":["right"]},{"label":["count_with.polyA"],"name":[16],"type":["dbl"],"align":["right"]}],"data":[{"1":"chr22","2":"10537137","3":"10537137","4":"1","5":"+","6":"10537137","7":"SRR299116.10198827","8":"32","9":"V1","10":"10537137","11":"SRR299116.10198827","12":"32","13":"V1","14":"PA1","15":"1","16":"1","_rn_":"1"},{"1":"chr22","2":"15829969","3":"15829969","4":"1","5":"+","6":"15829969","7":"SRR299116.14207086","8":"12","9":"V1","10":"15829969","11":"SRR299116.14207086","12":"12","13":"V1","14":"PA2","15":"3","16":"1","_rn_":"2"},{"1":"chr22","2":"16615105","3":"16615105","4":"1","5":"+","6":"16615105","7":"SRR299116.3585685","8":"7","9":"V1","10":"16615105","11":"SRR299116.3585685","12":"7","13":"V1","14":"PA3","15":"15","16":"1","_rn_":"3"},{"1":"chr22","2":"16698738","3":"16698738","4":"1","5":"+","6":"16698738","7":"SRR299116.5973275","8":"2","9":"V1","10":"16698738","11":"SRR299116.5973275","12":"2","13":"V1","14":"PA4","15":"1","16":"1","_rn_":"4"},{"1":"chr22","2":"17070675","3":"17070675","4":"1","5":"+","6":"17070675","7":"SRR299116.5143801","8":"8","9":"V1","10":"17070675","11":"SRR299116.5143801","12":"8","13":"V1","14":"PA5","15":"1","16":"1","_rn_":"5"},{"1":"chr22","2":"17165445","3":"17165445","4":"1","5":"+","6":"17165445","7":"SRR299116.4053048","8":"4","9":"V1","10":"17165445","11":"SRR299116.4053048","12":"4","13":"V1","14":"PA6","15":"1","16":"1","_rn_":"6"}],"options":{"columns":{"min":{},"max":[5]},"rows":{"min":[5],"max":[5]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["seqnames"],"name":[1],"type":["fct"],"align":["left"]},{"label":["start"],"name":[2],"type":["int"],"align":["right"]},{"label":["end"],"name":[3],"type":["int"],"align":["right"]},{"label":["width"],"name":[4],"type":["int"],"align":["right"]},{"label":["strand"],"name":[5],"type":["fct"],"align":["left"]},{"label":["coord"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["coord_readName"],"name":[7],"type":["chr"],"align":["left"]},{"label":["coord_unmappedA"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["coord_level"],"name":[9],"type":["fct"],"align":["left"]},{"label":["UPA_coord"],"name":[10],"type":["chr"],"align":["left"]},{"label":["UPA_readName"],"name":[11],"type":["chr"],"align":["left"]},{"label":["UPA_unmappedA"],"name":[12],"type":["chr"],"align":["left"]},{"label":["UPA_level"],"name":[13],"type":["chr"],"align":["left"]},{"label":["PAid"],"name":[14],"type":["chr"],"align":["left"]},{"label":["total.count"],"name":[15],"type":["dbl"],"align":["right"]},{"label":["count_with.polyA"],"name":[16],"type":["dbl"],"align":["right"]},{"label":["repeat_flag"],"name":[17],"type":["lgl"],"align":["right"]}],"data":[{"1":"chr22","2":"10537137","3":"10537137","4":"1","5":"+","6":"10537137","7":"SRR299116.10198827","8":"32","9":"V1","10":"10537137","11":"SRR299116.10198827","12":"32","13":"V1","14":"PA1","15":"1","16":"1","17":"FALSE","_rn_":"1"},{"1":"chr22","2":"15829969","3":"15829969","4":"1","5":"+","6":"15829969","7":"SRR299116.14207086","8":"12","9":"V1","10":"15829969","11":"SRR299116.14207086","12":"12","13":"V1","14":"PA2","15":"3","16":"1","17":"FALSE","_rn_":"2"},{"1":"chr22","2":"16615105","3":"16615105","4":"1","5":"+","6":"16615105","7":"SRR299116.3585685","8":"7","9":"V1","10":"16615105","11":"SRR299116.3585685","12":"7","13":"V1","14":"PA3","15":"15","16":"1","17":"FALSE","_rn_":"3"},{"1":"chr22","2":"16698738","3":"16698738","4":"1","5":"+","6":"16698738","7":"SRR299116.5973275","8":"2","9":"V1","10":"16698738","11":"SRR299116.5973275","12":"2","13":"V1","14":"PA4","15":"1","16":"1","17":"FALSE","_rn_":"4"},{"1":"chr22","2":"17070675","3":"17070675","4":"1","5":"+","6":"17070675","7":"SRR299116.5143801","8":"8","9":"V1","10":"17070675","11":"SRR299116.5143801","12":"8","13":"V1","14":"PA5","15":"1","16":"1","17":"FALSE","_rn_":"5"},{"1":"chr22","2":"17165445","3":"17165445","4":"1","5":"+","6":"17165445","7":"SRR299116.4053048","8":"4","9":"V1","10":"17165445","11":"SRR299116.4053048","12":"4","13":"V1","14":"PA6","15":"1","16":"1","17":"FALSE","_rn_":"6"}],"options":{"columns":{"min":{},"max":[5]},"rows":{"min":[5],"max":[5]},"pages":{}}}
   </script>
 </div>
 <pre class="r"><code>#filter PACs that were supported by at least five reads
-pac5.hg &lt;- subset(pa.hg.result$pa.coord,total.count&gt;=5)</code></pre>
+pac5.hg &lt;- subset(pa.hg.result$pa.coord,total.count&gt;=5)
+# Filter PACs whose representative polyA sites are not located in A-rich repeat regions.For polyA sites located in intronic regions, it is recommended to filter out those in repeat regions.
+pac5.hg.clean &lt;- subset(pac5.hg, !repeat_flag)</code></pre>
 <p><span style="color: blue;"> <strong>Example 2: Identifying and
 quantifying polyA sites in 3’seq data with polyA stretches</strong>
 </span></p>
@@ -2004,10 +2007,11 @@ pa.hg.result &lt;- FindPTA(bam=bam_A_file,
                         cutoffCount = 5,
                         ext3UTRlen =   1000 ,
                         isDRS = FALSE,
-                        run.quantify=TRUE)
+                        run.quantify=TRUE,
+                        detect.repeat=TRUE)
 # Display details of alignment and category of aligned reads
 rmarkdown::paged_table(head(pa.hg.result$pa.table[,c(&quot;readName&quot;,&quot;cigar&quot;,&quot;seq&quot;,
-                                                     &quot;softClipFragment&quot;,&quot;trimmed_seq&quot;,
+                                                             &quot;softClipFragment&quot;,&quot;trimmed_seq&quot;,
                                                      &quot;unmapped_seq&quot;,
                                                      &quot;reference_seq&quot;,&quot;is_Arich&quot;,
                                                      &quot;chr&quot;,&quot;strand&quot;,&quot;coord&quot;,
@@ -2022,7 +2026,9 @@ knitr::kable(t(table(pa.hg.result$pa.table$level)))
 rmarkdown::paged_table(head(pa.hg.result$pa.coord),
                        options = list(rows.print = 5, cols.print = 5)) 
 #filter PACs that were supported by at least five reads
-pac5.hg &lt;- subset(pa.hg.result$pa.coord,total.count&gt;=5)</code></pre>
+pac5.hg &lt;- subset(pa.hg.result$pa.coord,total.count&gt;=5)
+# Filter PACs whose representative polyA sites are not located in A-rich repeat regions.For polyA sites located in intronic regions, it is recommended to filter out those in repeat regions.
+pac5.hg.clean &lt;- subset(pac5.hg, !repeat_flag)</code></pre>
 </div>
 <div id="identify-pacs-in-mouse-genome" class="section level2">
 <h2>Identify PACs in mouse genome</h2>
@@ -2063,7 +2069,8 @@ pa.mm.result &lt;- FindPTA(bam=bam_T_file,
                         cutoffCount = 5,
                         ext3UTRlen =   1000 ,
                         isDRS = FALSE,
-                        run.quantify=TRUE)
+                        run.quantify=TRUE,
+                        detect.repeat=TRUE)
 #&gt; [1] &quot;The program is reading the BAM files.&quot;
 #&gt; [1] &quot;Extract reference sequence around polyA coordinate.&quot;
 #&gt; [1] &quot;Detecting reads with polyA tail and adjust polyA coordinate&quot;
@@ -2114,11 +2121,13 @@ rmarkdown::paged_table(head(pa.mm.result$pa.coord),
                        options = list(rows.print = 5, cols.print = 5)) </code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["seqnames"],"name":[1],"type":["fct"],"align":["left"]},{"label":["start"],"name":[2],"type":["int"],"align":["right"]},{"label":["end"],"name":[3],"type":["int"],"align":["right"]},{"label":["width"],"name":[4],"type":["int"],"align":["right"]},{"label":["strand"],"name":[5],"type":["fct"],"align":["left"]},{"label":["coord"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["coord_readName"],"name":[7],"type":["chr"],"align":["left"]},{"label":["coord_unmappedA"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["coord_level"],"name":[9],"type":["fct"],"align":["left"]},{"label":["UPA_coord"],"name":[10],"type":["chr"],"align":["left"]},{"label":["UPA_readName"],"name":[11],"type":["chr"],"align":["left"]},{"label":["UPA_unmappedA"],"name":[12],"type":["chr"],"align":["left"]},{"label":["UPA_level"],"name":[13],"type":["chr"],"align":["left"]},{"label":["PAid"],"name":[14],"type":["chr"],"align":["left"]},{"label":["total.count"],"name":[15],"type":["dbl"],"align":["right"]},{"label":["count_with.polyA"],"name":[16],"type":["dbl"],"align":["right"]}],"data":[{"1":"chr19","2":"3053276","3":"3053276","4":"1","5":"+","6":"3053276","7":"SRR766743.24235429","8":"2","9":"V1","10":"3053276","11":"SRR766743.24235429","12":"2","13":"V1","14":"PA1","15":"1","16":"1","_rn_":"1"},{"1":"chr19","2":"3257716","3":"3257716","4":"1","5":"+","6":"3257716","7":"SRR766743.12506224","8":"2","9":"V1","10":"3257716","11":"SRR766743.12506224","12":"2","13":"V1","14":"PA2","15":"1","16":"1","_rn_":"2"},{"1":"chr19","2":"3341012","3":"3341012","4":"1","5":"+","6":"3341012","7":"SRR766743.1244478","8":"3","9":"V1","10":"3341012","11":"SRR766743.1244478","12":"3","13":"V1","14":"PA3","15":"5","16":"5","_rn_":"3"},{"1":"chr19","2":"3341174","3":"3341209","4":"36","5":"+","6":"3341201","7":"SRR766743.2103096","8":"9","9":"V1","10":"3341201,3341195,3341198,3341197,3341209,3341202,3341174,3341193,3341199,3341178","11":"SRR766743.2103096,SRR766743.12039327,SRR766743.11457193,SRR766743.19062084,SRR766743.17174690,SRR766743.20886393,SRR766743.11756471,SRR766743.18699490,SRR766743.18814779,SRR766743.20348598","12":"9,8,7,6,6,4,3,3,3,2","13":"V1,V1,V1,V1,V1,V1,V1,V1,V1,V2","14":"PA4","15":"1448","16":"1448","_rn_":"4"},{"1":"chr19","2":"3341283","3":"3341283","4":"1","5":"+","6":"3341283","7":"SRR766743.5720158","8":"7","9":"V1","10":"3341283","11":"SRR766743.5720158","12":"7","13":"V1","14":"PA5","15":"1","16":"1","_rn_":"5"},{"1":"chr19","2":"3343553","3":"3343553","4":"1","5":"+","6":"3343553","7":"SRR766743.6254642","8":"4","9":"V1","10":"3343553","11":"SRR766743.6254642","12":"4","13":"V1","14":"PA6","15":"1","16":"1","_rn_":"6"}],"options":{"columns":{"min":{},"max":[5]},"rows":{"min":[5],"max":[5]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["seqnames"],"name":[1],"type":["fct"],"align":["left"]},{"label":["start"],"name":[2],"type":["int"],"align":["right"]},{"label":["end"],"name":[3],"type":["int"],"align":["right"]},{"label":["width"],"name":[4],"type":["int"],"align":["right"]},{"label":["strand"],"name":[5],"type":["fct"],"align":["left"]},{"label":["coord"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["coord_readName"],"name":[7],"type":["chr"],"align":["left"]},{"label":["coord_unmappedA"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["coord_level"],"name":[9],"type":["fct"],"align":["left"]},{"label":["UPA_coord"],"name":[10],"type":["chr"],"align":["left"]},{"label":["UPA_readName"],"name":[11],"type":["chr"],"align":["left"]},{"label":["UPA_unmappedA"],"name":[12],"type":["chr"],"align":["left"]},{"label":["UPA_level"],"name":[13],"type":["chr"],"align":["left"]},{"label":["PAid"],"name":[14],"type":["chr"],"align":["left"]},{"label":["total.count"],"name":[15],"type":["dbl"],"align":["right"]},{"label":["count_with.polyA"],"name":[16],"type":["dbl"],"align":["right"]},{"label":["repeat_flag"],"name":[17],"type":["lgl"],"align":["right"]}],"data":[{"1":"chr19","2":"3053276","3":"3053276","4":"1","5":"+","6":"3053276","7":"SRR766743.24235429","8":"2","9":"V1","10":"3053276","11":"SRR766743.24235429","12":"2","13":"V1","14":"PA1","15":"1","16":"1","17":"FALSE","_rn_":"1"},{"1":"chr19","2":"3257716","3":"3257716","4":"1","5":"+","6":"3257716","7":"SRR766743.12506224","8":"2","9":"V1","10":"3257716","11":"SRR766743.12506224","12":"2","13":"V1","14":"PA2","15":"1","16":"1","17":"FALSE","_rn_":"2"},{"1":"chr19","2":"3341012","3":"3341012","4":"1","5":"+","6":"3341012","7":"SRR766743.1244478","8":"3","9":"V1","10":"3341012","11":"SRR766743.1244478","12":"3","13":"V1","14":"PA3","15":"5","16":"5","17":"FALSE","_rn_":"3"},{"1":"chr19","2":"3341174","3":"3341209","4":"36","5":"+","6":"3341201","7":"SRR766743.2103096","8":"9","9":"V1","10":"3341201,3341195,3341198,3341197,3341209,3341202,3341174,3341193,3341199,3341178","11":"SRR766743.2103096,SRR766743.12039327,SRR766743.11457193,SRR766743.19062084,SRR766743.17174690,SRR766743.20886393,SRR766743.11756471,SRR766743.18699490,SRR766743.18814779,SRR766743.20348598","12":"9,8,7,6,6,4,3,3,3,2","13":"V1,V1,V1,V1,V1,V1,V1,V1,V1,V2","14":"PA4","15":"1448","16":"1448","17":"FALSE","_rn_":"4"},{"1":"chr19","2":"3341283","3":"3341283","4":"1","5":"+","6":"3341283","7":"SRR766743.5720158","8":"7","9":"V1","10":"3341283","11":"SRR766743.5720158","12":"7","13":"V1","14":"PA5","15":"1","16":"1","17":"FALSE","_rn_":"5"},{"1":"chr19","2":"3343553","3":"3343553","4":"1","5":"+","6":"3343553","7":"SRR766743.6254642","8":"4","9":"V1","10":"3343553","11":"SRR766743.6254642","12":"4","13":"V1","14":"PA6","15":"1","16":"1","17":"FALSE","_rn_":"6"}],"options":{"columns":{"min":{},"max":[5]},"rows":{"min":[5],"max":[5]},"pages":{}}}
   </script>
 </div>
 <pre class="r"><code>#filter PACs that were supported by at least five reads
-pac5.mm &lt;- subset(pa.mm.result$pa.coord,total.count&gt;=5)</code></pre>
+pac5.mm &lt;- subset(pa.mm.result$pa.coord,total.count&gt;=5)
+# Filter PACs whose representative polyA sites are not located in A-rich repeat regions.  For polyA sites located in intronic regions, it is recommended to filter out those in repeat regions.
+pac5.mm.clean &lt;- subset(pac5.mm, !repeat_flag)</code></pre>
 </div>
 <div id="identify-pacs-in-arabidopsis-genome" class="section level2">
 <h2>Identify PACs in Arabidopsis genome</h2>
@@ -2155,7 +2164,8 @@ pa.tair.result &lt;- FindPTA(bam=bam_T_file,
                           cutoffCount = 5,
                           ext3UTRlen =   1000 ,
                           isDRS = FALSE,
-                          run.quantify=TRUE)
+                          run.quantify=TRUE,
+                          detect.repeat=TRUE)
 #&gt; [1] &quot;The program is reading the BAM files.&quot;
 #&gt; [1] &quot;Extract reference sequence around polyA coordinate.&quot;
 #&gt; [1] &quot;Detecting reads with polyA tail and adjust polyA coordinate&quot;
@@ -2178,7 +2188,7 @@ pa.tair.result &lt;- FindPTA(bam=bam_T_file,
 
 # Display details of alignment and category of aligned reads
 rmarkdown::paged_table(head(pa.tair.result$pa.table[,c(&quot;readName&quot;,&quot;cigar&quot;,&quot;seq&quot;,
-                                                       &quot;softClipFragment&quot;,&quot;trimmed_seq&quot;,
+                   &quot;softClipFragment&quot;,&quot;trimmed_seq&quot;,
                                                        &quot;unmapped_seq&quot;,
                                                        &quot;reference_seq&quot;,&quot;is_Arich&quot;,
                                                        &quot;chr&quot;,&quot;strand&quot;,&quot;coord&quot;,
@@ -2205,11 +2215,13 @@ rmarkdown::paged_table(head(pa.tair.result$pa.coord),
                        options = list(rows.print = 5, cols.print = 5)) </code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["seqnames"],"name":[1],"type":["fct"],"align":["left"]},{"label":["start"],"name":[2],"type":["int"],"align":["right"]},{"label":["end"],"name":[3],"type":["int"],"align":["right"]},{"label":["width"],"name":[4],"type":["int"],"align":["right"]},{"label":["strand"],"name":[5],"type":["fct"],"align":["left"]},{"label":["coord"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["coord_readName"],"name":[7],"type":["chr"],"align":["left"]},{"label":["coord_unmappedA"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["coord_level"],"name":[9],"type":["fct"],"align":["left"]},{"label":["UPA_coord"],"name":[10],"type":["chr"],"align":["left"]},{"label":["UPA_readName"],"name":[11],"type":["chr"],"align":["left"]},{"label":["UPA_unmappedA"],"name":[12],"type":["chr"],"align":["left"]},{"label":["UPA_level"],"name":[13],"type":["chr"],"align":["left"]},{"label":["PAid"],"name":[14],"type":["chr"],"align":["left"]},{"label":["total.count"],"name":[15],"type":["dbl"],"align":["right"]},{"label":["count_with.polyA"],"name":[16],"type":["dbl"],"align":["right"]}],"data":[{"1":"2","2":"1930","3":"1930","4":"1","5":"+","6":"1930","7":"SRR5055884.24415170","8":"18","9":"V1","10":"1930","11":"SRR5055884.24415170","12":"18","13":"V1","14":"PA1","15":"2","16":"2","_rn_":"1"},{"1":"2","2":"1989","3":"1989","4":"1","5":"+","6":"1989","7":"SRR5055884.1010650","8":"17","9":"V1","10":"1989","11":"SRR5055884.1010650","12":"17","13":"V1","14":"PA2","15":"1","16":"1","_rn_":"2"},{"1":"2","2":"3436","3":"3436","4":"1","5":"+","6":"3436","7":"SRR5055884.19639572","8":"19","9":"V1","10":"3436","11":"SRR5055884.19639572","12":"19","13":"V1","14":"PA3","15":"1","16":"1","_rn_":"3"},{"1":"2","2":"3565","3":"3565","4":"1","5":"+","6":"3565","7":"SRR5055884.9118837","8":"19","9":"V1","10":"3565","11":"SRR5055884.9118837","12":"19","13":"V1","14":"PA4","15":"1","16":"1","_rn_":"4"},{"1":"2","2":"3610","3":"3610","4":"1","5":"+","6":"3610","7":"SRR5055884.28398207","8":"17","9":"V1","10":"3610","11":"SRR5055884.28398207","12":"17","13":"V1","14":"PA5","15":"2","16":"2","_rn_":"5"},{"1":"2","2":"4177","3":"4177","4":"1","5":"+","6":"4177","7":"SRR5055884.10718460","8":"18","9":"V1","10":"4177","11":"SRR5055884.10718460","12":"18","13":"V1","14":"PA6","15":"1","16":"1","_rn_":"6"}],"options":{"columns":{"min":{},"max":[5]},"rows":{"min":[5],"max":[5]},"pages":{}}}
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["seqnames"],"name":[1],"type":["fct"],"align":["left"]},{"label":["start"],"name":[2],"type":["int"],"align":["right"]},{"label":["end"],"name":[3],"type":["int"],"align":["right"]},{"label":["width"],"name":[4],"type":["int"],"align":["right"]},{"label":["strand"],"name":[5],"type":["fct"],"align":["left"]},{"label":["coord"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["coord_readName"],"name":[7],"type":["chr"],"align":["left"]},{"label":["coord_unmappedA"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["coord_level"],"name":[9],"type":["fct"],"align":["left"]},{"label":["UPA_coord"],"name":[10],"type":["chr"],"align":["left"]},{"label":["UPA_readName"],"name":[11],"type":["chr"],"align":["left"]},{"label":["UPA_unmappedA"],"name":[12],"type":["chr"],"align":["left"]},{"label":["UPA_level"],"name":[13],"type":["chr"],"align":["left"]},{"label":["PAid"],"name":[14],"type":["chr"],"align":["left"]},{"label":["total.count"],"name":[15],"type":["dbl"],"align":["right"]},{"label":["count_with.polyA"],"name":[16],"type":["dbl"],"align":["right"]},{"label":["repeat_flag"],"name":[17],"type":["lgl"],"align":["right"]}],"data":[{"1":"2","2":"1930","3":"1930","4":"1","5":"+","6":"1930","7":"SRR5055884.24415170","8":"18","9":"V1","10":"1930","11":"SRR5055884.24415170","12":"18","13":"V1","14":"PA1","15":"2","16":"2","17":"FALSE","_rn_":"1"},{"1":"2","2":"1989","3":"1989","4":"1","5":"+","6":"1989","7":"SRR5055884.1010650","8":"17","9":"V1","10":"1989","11":"SRR5055884.1010650","12":"17","13":"V1","14":"PA2","15":"1","16":"1","17":"FALSE","_rn_":"2"},{"1":"2","2":"3436","3":"3436","4":"1","5":"+","6":"3436","7":"SRR5055884.19639572","8":"19","9":"V1","10":"3436","11":"SRR5055884.19639572","12":"19","13":"V1","14":"PA3","15":"1","16":"1","17":"FALSE","_rn_":"3"},{"1":"2","2":"3565","3":"3565","4":"1","5":"+","6":"3565","7":"SRR5055884.9118837","8":"19","9":"V1","10":"3565","11":"SRR5055884.9118837","12":"19","13":"V1","14":"PA4","15":"1","16":"1","17":"FALSE","_rn_":"4"},{"1":"2","2":"3610","3":"3610","4":"1","5":"+","6":"3610","7":"SRR5055884.28398207","8":"17","9":"V1","10":"3610","11":"SRR5055884.28398207","12":"17","13":"V1","14":"PA5","15":"2","16":"2","17":"FALSE","_rn_":"5"},{"1":"2","2":"4177","3":"4177","4":"1","5":"+","6":"4177","7":"SRR5055884.10718460","8":"18","9":"V1","10":"4177","11":"SRR5055884.10718460","12":"18","13":"V1","14":"PA6","15":"1","16":"1","17":"TRUE","_rn_":"6"}],"options":{"columns":{"min":{},"max":[5]},"rows":{"min":[5],"max":[5]},"pages":{}}}
   </script>
 </div>
 <pre class="r"><code>#filter PACs that were supported by at least five reads
-pac5.tair&lt;- subset(pa.tair.result$pa.coord,total.count&gt;=5)</code></pre>
+pac5.tair&lt;- subset(pa.tair.result$pa.coord,total.count&gt;=5)
+# Filter PACs whose representative polyA sites are not located in A-rich repeat regions.For polyA sites located in intronic regions, it is recommended to filter out those in repeat regions.
+pac5.tair.clean &lt;- subset(pac5.tair, !repeat_flag)</code></pre>
 </div>
 </div>
 <div id="remove-internal-priming-artifacts" class="section level1">
@@ -2222,6 +2234,10 @@ network (RNN). CNN extracts features from sequences, and RNN is used to
 combine the extracted feature effects for predicting internal priming
 artifacts.The corresponding DeepIP scripts are available in the
 PolyAseqTrap GitHub repository.</p>
+<p><strong>Note:</strong> For detailed information about
+<strong>DeepIP</strong>, please refer to its GitHub repository:
+<strong><a href="https://github.com/APAexplorer/DeepIP_R">DeepIP_R
+version</a></strong> or <strong><a href="https://github.com/APAexplorer/DeepIP">DeepIP</a></strong>.</p>
 <div id="install-deepip" class="section level2">
 <h2>Install DeepIP</h2>
 <p>DeepIP can run on both Linux, and Windows, systems. To install and
@@ -2385,7 +2401,7 @@ index &lt;- which(PACs_human$pa.table$label %in% ip.table$title)
 # remove internal priming artifacts
 PACs_human$pa.table$level[index] &lt;- &quot;Count&quot;
 PACs_human$pa.table$level &lt;- factor( PACs_human$pa.table$level,
-                                     levels=c(&quot;V1&quot;,&quot;V2&quot;,&quot;V3&quot;,&quot;V4&quot;,&quot;V5&quot;,&quot;V6&quot;,&quot;V7&quot;,&quot;V8&quot;,&quot;Count&quot;))
+        levels=c(&quot;V1&quot;,&quot;V2&quot;,&quot;V3&quot;,&quot;V4&quot;,&quot;V5&quot;,&quot;V6&quot;,&quot;V7&quot;,&quot;V8&quot;,&quot;Count&quot;))
                               
                                 
 ## regroup nearby cleavage sites
@@ -2475,12 +2491,17 @@ documentation.</p>
 library(&quot;BSgenome.Hsapiens.UCSC.hg38&quot;, quietly = TRUE)
 library(movAPA, warn.conflicts = FALSE, quietly=TRUE)
 bsgenome &lt;-BSgenome.Hsapiens.UCSC.hg38
-
 athGFF &lt;- &quot;Homo_sapiens.GRCh38.110.gtf&quot;
 annotation &lt;- parseGff(athGFF)
 
 # load identified PACs in human genome using FindPTA function
 data(PACs_human)
+
+#to check whether the representative polyA site is located in a repeat region
+#For polyA sites located in intronic regions, it is recommended to filter out those in repeat regions
+PACs_human$pa.coord &lt;-  check.repeat(pac.result=PACs_human$pa.coord,
+                                     bsgenome =bsgenome )
+
 colnames(PACs_human$pa.coord)[1:3] &lt;- c(&quot;chr&quot;,&quot;UPA_start&quot;,&quot;UPA_end&quot;)
 data.PACds &lt;- readPACds(PACs_human$pa.coord, colDataFile=NULL)
 # annotate PAC
@@ -2502,6 +2523,8 @@ table(data.PACds@anno$ftr)
 #3UTR       5UTR       exon intergenic     intron 
 #941          1         54        608        589 
 
+# For intonic PACs, it is recommended to filter out those in repeat regions
+ipa.result &lt;- subset(data.PACds@anno,ftr==&quot;intron&quot;&amp;repeat_flag==FALSE)
 save(data.PACds,file=&quot;data.PACds.rda&quot;)
 </code></pre>
 </div>
@@ -2574,7 +2597,7 @@ in the generation of the present document.</p>
 <pre class="r"><code>sessionInfo()
 #&gt; R version 4.3.1 (2023-06-16)
 #&gt; Platform: aarch64-apple-darwin20 (64-bit)
-#&gt; Running under: macOS 15.1
+#&gt; Running under: macOS 15.3.1
 #&gt; 
 #&gt; Matrix products: default
 #&gt; BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
@@ -2609,42 +2632,42 @@ in the generation of the present document.</p>
 #&gt; [16] PolyAseqTrap_0.1.0                     
 #&gt; 
 #&gt; loaded via a namespace (and not attached):
-#&gt;  [1] SummarizedExperiment_1.32.0 gtable_0.3.4               
-#&gt;  [3] rjson_0.2.21                xfun_0.41                  
-#&gt;  [5] bslib_0.6.1                 lattice_0.22-5             
-#&gt;  [7] Biobase_2.62.0              vctrs_0.6.5                
-#&gt;  [9] tools_4.3.1                 bitops_1.0-7               
-#&gt; [11] generics_0.1.3              parallel_4.3.1             
-#&gt; [13] tibble_3.2.1                pbmcapply_1.5.1            
-#&gt; [15] fansi_1.0.6                 highr_0.10                 
-#&gt; [17] pkgconfig_2.0.3             Matrix_1.6-4               
-#&gt; [19] RColorBrewer_1.1-3          lifecycle_1.0.4            
-#&gt; [21] GenomeInfoDbData_1.2.11     farver_2.1.1               
-#&gt; [23] compiler_4.3.1              stringr_1.5.1              
-#&gt; [25] Rsamtools_2.18.0            munsell_0.5.0              
-#&gt; [27] statmod_1.5.0               codetools_0.2-19           
-#&gt; [29] htmltools_0.5.7             sass_0.4.8                 
-#&gt; [31] RCurl_1.98-1.13             yaml_2.3.7                 
-#&gt; [33] pillar_1.9.0                crayon_1.5.2               
-#&gt; [35] jquerylib_0.1.4             BiocParallel_1.36.0        
-#&gt; [37] DelayedArray_0.28.0         cachem_1.0.8               
-#&gt; [39] limma_3.58.1                abind_1.4-5                
-#&gt; [41] tidyselect_1.2.0            digest_0.6.33              
-#&gt; [43] stringi_1.8.2               restfulr_0.0.15            
-#&gt; [45] labeling_0.4.3              grid_4.3.1                 
-#&gt; [47] fastmap_1.1.1               colorspace_2.1-0           
-#&gt; [49] SparseArray_1.2.2           cli_3.6.2                  
-#&gt; [51] magrittr_2.0.3              S4Arrays_1.2.0             
-#&gt; [53] XML_3.99-0.16               utf8_1.2.4                 
-#&gt; [55] withr_3.0.1                 scales_1.3.0               
-#&gt; [57] rmarkdown_2.25              matrixStats_1.1.0          
-#&gt; [59] evaluate_0.23               knitr_1.45                 
-#&gt; [61] rlang_1.1.4                 Rcpp_1.0.11                
-#&gt; [63] glue_1.8.0                  rstudioapi_0.15.0          
-#&gt; [65] jsonlite_1.8.8              R6_2.5.1                   
-#&gt; [67] plyr_1.8.9                  MatrixGenerics_1.14.0      
-#&gt; [69] GenomicAlignments_1.38.0    zlibbioc_1.48.0            
-#&gt; [71] outliers_0.15</code></pre>
+#&gt;  [1] SummarizedExperiment_1.32.0 stringdist_0.9.12          
+#&gt;  [3] gtable_0.3.4                rjson_0.2.21               
+#&gt;  [5] xfun_0.41                   bslib_0.6.1                
+#&gt;  [7] lattice_0.22-5              Biobase_2.62.0             
+#&gt;  [9] vctrs_0.6.5                 tools_4.3.1                
+#&gt; [11] bitops_1.0-7                generics_0.1.3             
+#&gt; [13] parallel_4.3.1              tibble_3.2.1               
+#&gt; [15] pbmcapply_1.5.1             fansi_1.0.6                
+#&gt; [17] highr_0.10                  pkgconfig_2.0.3            
+#&gt; [19] Matrix_1.6-4                RColorBrewer_1.1-3         
+#&gt; [21] lifecycle_1.0.4             GenomeInfoDbData_1.2.11    
+#&gt; [23] farver_2.1.1                compiler_4.3.1             
+#&gt; [25] stringr_1.5.1               Rsamtools_2.18.0           
+#&gt; [27] munsell_0.5.0               statmod_1.5.0              
+#&gt; [29] codetools_0.2-19            htmltools_0.5.7            
+#&gt; [31] sass_0.4.8                  RCurl_1.98-1.13            
+#&gt; [33] yaml_2.3.7                  pillar_1.9.0               
+#&gt; [35] crayon_1.5.2                jquerylib_0.1.4            
+#&gt; [37] BiocParallel_1.36.0         DelayedArray_0.28.0        
+#&gt; [39] cachem_1.0.8                limma_3.58.1               
+#&gt; [41] abind_1.4-5                 tidyselect_1.2.0           
+#&gt; [43] digest_0.6.33               stringi_1.8.2              
+#&gt; [45] restfulr_0.0.15             labeling_0.4.3             
+#&gt; [47] grid_4.3.1                  fastmap_1.1.1              
+#&gt; [49] colorspace_2.1-0            SparseArray_1.2.2          
+#&gt; [51] cli_3.6.2                   magrittr_2.0.3             
+#&gt; [53] S4Arrays_1.2.0              XML_3.99-0.16              
+#&gt; [55] utf8_1.2.4                  withr_3.0.1                
+#&gt; [57] scales_1.3.0                rmarkdown_2.25             
+#&gt; [59] matrixStats_1.1.0           evaluate_0.23              
+#&gt; [61] knitr_1.45                  rlang_1.1.4                
+#&gt; [63] Rcpp_1.0.11                 glue_1.8.0                 
+#&gt; [65] rstudioapi_0.15.0           jsonlite_1.8.8             
+#&gt; [67] R6_2.5.1                    plyr_1.8.9                 
+#&gt; [69] MatrixGenerics_1.14.0       GenomicAlignments_1.38.0   
+#&gt; [71] zlibbioc_1.48.0             outliers_0.15</code></pre>
 </div>
 <div id="refer" class="section level1">
 <h1>References</h1>
