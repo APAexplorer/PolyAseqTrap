@@ -16,7 +16,8 @@ FindPTA(
   cutoffCount = 5,
   ext3UTRlen = 1000,
   isDRS = FALSE,
-  run.quantify = TRUE
+  run.quantify = TRUE,
+  detect.repeat = FALSE
 )
 }
 \arguments{
@@ -54,6 +55,8 @@ to be used for polyA determination.}
 Default is FALSE.}
 
 \item{run.quantify}{If TRUE (default), quantify polyA sites.}
+
+\item{detect.repeat}{Logical. If TRUE (default: FALSE), checks whether polyA sites originate from A-rich repeat regions.}
 }
 \value{
 A list containing two elements about alignment results and PACs.
@@ -93,6 +96,7 @@ A list containing two elements about alignment results and PACs.
       \item{coord_readName}{The name of the read supporting the representative polyA site.}
       \item{coord_unmappedA}{The total number of non-genomic As at the 3’ end of the representative read.}
       \item{coord_level}{The confidence level of the representative polyA site.}
+      \item{repeat_flag}{Logical. Indicates whether the representative polyA site is located in a repeat region.Filtering is recommended for intronic polyA sites.}
       \item{UPA_coord}{The coordinates of aligned reads in corresponding PACs.}
       \item{UPA_readName}{The name of aligned reads in corresponding PACs.}
       \item{UPA_level}{The confidence level label of aligned reads in corresponding PACs.}
