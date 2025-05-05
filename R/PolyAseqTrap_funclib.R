@@ -11,6 +11,7 @@
 #' @importFrom pbmcapply pbmcmapply
 #' @importFrom limma strsplit2
 #' @importFrom methods as
+#' @importFrom stringdist stringdistmatrix
 NULL
 
 
@@ -41,6 +42,7 @@ options(stringsAsFactors=F)
 #'                    in BAM file lack 'chr' prefix but the genome sequence includes it.
 #'                    Default is FALSE.
 #' @param run.quantify  If TRUE (default), quantify polyA sites.
+#' @param detect.repeat Logical. If TRUE (default: FALSE), checks whether polyA sites originate from A-rich repeat regions.
 #' @param d A distance to group nearby polyA sites into a polyA site cluster (PAC). Default is 24 nt.
 #' @param poly Specifies the type of polyA tail at the 3' end of the sequence.
 #'             Must be either 'T' (for a poly(T) stretch, e.g., TTTTTT-like tails)
@@ -83,6 +85,7 @@ options(stringsAsFactors=F)
 #'       \item{coord_readName}{The name of the read supporting the representative polyA site.}
 #'       \item{coord_unmappedA}{The total number of non-genomic As at the 3’ end of the representative read.}
 #'       \item{coord_level}{The confidence level of the representative polyA site.}
+#'       \item{repeat_flag}{Logical. Indicates whether the representative polyA site is located in a repeat region.Filtering is recommended for intronic polyA sites.}
 #'       \item{UPA_coord}{The coordinates of aligned reads in corresponding PACs.}
 #'       \item{UPA_readName}{The name of aligned reads in corresponding PACs.}
 #'       \item{UPA_level}{The confidence level label of aligned reads in corresponding PACs.}
@@ -97,7 +100,7 @@ FindPTA <- function(bam=NULL,yieldSize=26000000,reverse=FALSE,
                           bsgenome=NULL,d=24,poly="T",adjust.chr=FALSE,
                           threeUTRregion=NULL,
                           cutoffCount=5,ext3UTRlen=1000,isDRS=FALSE,
-                          run.quantify=TRUE){
+                          run.quantify=TRUE,detect.repeat=FALSE){
   ## convert bam into data.frame
   if((poly!="T" & poly!="A")){
     stop("Please make sure input of poly is `T` or `A`")
@@ -272,6 +275,9 @@ FindPTA <- function(bam=NULL,yieldSize=26000000,reverse=FALSE,
   if(run.quantify){
     print("Completed: Identification and quantification of polyA sites")
     result.list <- resut.PA(aln.result=aln.result,d=d)
+    if(detect.repeat){
+      result.list$pa.coord <- check.repeat(pac.result=result.list$pa.coord,bsgenome =bsgenome )
+    }
     return(result.list)
   }else{
     print("Completed: Identification of polyA sites")
@@ -281,6 +287,87 @@ FindPTA <- function(bam=NULL,yieldSize=26000000,reverse=FALSE,
 
 }
 
+#' A check.repeat function
+#'
+#' This function examines whether the representative polyA sites in a PAC data frame
+#' are located within A-rich repeat regions. It uses a reference genome (BSgenome)
+#' to extract the local sequence around each site and assess A-richness and repeat content.
+#'
+#' @name check.repeat
+#' @param pac.result A data frame of PACs (polyA site clusters), which must include a 'coord' column indicating the genomic coordinate of each representative polyA site.
+#' @param bsgenome A BSgenome object for reference genome. e.g. 'BSgenome.Hsapiens.UCSC.hg38'.
+#' @return A data frame identical to \code{pac.result}, with an additional logical column (e.g., \code{repeat_flag}) indicating whether each representative polyA site is located in an A-rich repeat region.
+#' @export
+check.repeat<- function(pac.result=NULL,bsgenome =NULL ){
+  index.plus <- which( pac.result$strand=="+")
+  index.minus <- which(pac.result$strand=="-")
+  sub.info.plus <- data.frame(chr=as.character(pac.result$seqnames[index.plus]) ,
+                              start=as.numeric(pac.result$coord[index.plus]),
+                              end=as.numeric(pac.result$coord[index.plus])+10)
+
+  sub.info.minus <- data.frame(chr=as.character(pac.result$seqnames[ index.minus]),
+                               start=as.numeric(pac.result$coord[ index.minus]-10),
+                               end=as.numeric(pac.result$coord[ index.minus]))
+
+  seq.plus <- as.character(getSeq(bsgenome ,
+                                      as(sub.info.plus, "GRanges")))
+
+  seq.minus <-  as.character(reverseComplement(getSeq(  bsgenome , as(sub.info.minus, "GRanges"))) )
+  pac.result$seq_repeat <- NA
+  pac.result$seq_repeat[index.plus] <-   seq.plus
+  pac.result$seq_repeat[index.minus] <-   seq.minus
+  seq_repeat <-   pac.result$seq_repeat
+  pac.result$seq_repeat <- NULL
+  is.repeat4 <- as.character(sapply(seq_repeat, is_fuzzy_repeat,k = 4))
+  is.repeat3 <- as.character(sapply(seq_repeat, is_fuzzy_repeat,k = 3))
+  is.repeat2 <- as.character(sapply(seq_repeat, is_fuzzy_repeat,k = 2))
+  A_number_seq <- stringr::str_count(seq_repeat, pattern = "A")
+  A_pecentage <-     A_number_seq/nchar(seq_repeat)
+  repeat2 <- is.repeat2 == "TRUE"
+  repeat3 <- is.repeat3 == "TRUE"
+  repeat4 <- is.repeat4 == "TRUE"
+  is.repeat <- (repeat2 |  repeat3 |  repeat4 )
+  pac.result$repeat_flag <- (is.repeat&A_pecentage>0.5 )
+  return(pac.result)
+}
+
+
+
+#' Detect Fuzzy A-rich Repeats in a Sequence
+#'
+#' This function determines whether a given DNA sequence contains fuzzy A-rich repeat regions.
+#' It scans the sequence for k-mers and assesses pairwise similarity using the Hamming distance.
+#' If a sufficient number of highly similar k-mers are found, the sequence is considered to contain fuzzy repeats.
+#'
+#' @param seq A character string representing a DNA sequence.
+#' @param k Integer. The k-mer length used for similarity calculation (default: 4).
+#' @param similarity_threshold Numeric. Minimum similarity (0–1) between k-mers to be considered a repeat (default: 0.75).
+#' @param min_repeats Integer. Minimum number of similar k-mer pairs required to classify the sequence as a fuzzy repeat (default: 3).
+#'
+#' @return Logical. Returns \code{TRUE} if the sequence is identified as containing fuzzy repeats, otherwise \code{FALSE}.
+#'
+#' @examples
+#' is_fuzzy_repeat("AAAAATAAAAAGAAAA")
+#' is_fuzzy_repeat("ATCGTACGATCG")
+#'
+#' @export
+is_fuzzy_repeat <- function(seq, k = 4, similarity_threshold = 0.75, min_repeats = 3) {
+  seq <- toupper(seq)
+  n <- nchar(seq)
+
+  if (n < k + 1) return(FALSE)
+
+  kmers <- sapply(1:(n - k + 1), function(i) substr(seq, i, i + k - 1))
+
+  # pairwise
+  sim_matrix <- 1 - stringdistmatrix(kmers, kmers, method = "hamming") / k
+
+
+  sim_matrix[lower.tri(sim_matrix, diag = TRUE)] <- NA
+  count_similar_pairs <- sum(sim_matrix >= similarity_threshold, na.rm = TRUE)
+
+  return(count_similar_pairs >= min_repeats)
+}
 
 
 
