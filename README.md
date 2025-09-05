@@ -60,7 +60,7 @@ To facilitate quick testing of different modules of PolyASeqTrap, we provide dem
 
 In addition, we provide demo BAM files for human, mouse, and Arabidopsis  under the [demo_data](https://github.com/APAexplorer/PolyAseqTrap/tree/refer/demo_data) directory. Please refer to the vignette ([PDF](https://apaexplorer.github.io/PolyAseqTrap/vignettes/PolyAseqTrap_tutorial.pdf), [HTML](https://apaexplorer.github.io/PolyAseqTrap/vignettes/PolyAseqTrap_tutorial.html)) for full details.
 
-For the **DeepIP** module of PolyASeqTrap, demo data are also provided. For full DeepIP resources, please refer to the **[DeepIP_R version](https://github.com/APAexplorer/DeepIP_R)** or **[DeepIP](https://github.com/APAexplorer/DeepIP)** repositories.
+For the **DeepIP** module of PolyASeqTrap, demo data are also provided. For full DeepIP resources, please refer to the [DeepIP_R version](https://github.com/APAexplorer/DeepIP_R) or [DeepIP](https://github.com/APAexplorer/DeepIP) repositories.
 
 
 
