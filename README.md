@@ -54,6 +54,16 @@ browseURL("https://apaexplorer.github.io/PolyAseqTrap/vignettes/PolyAseqTrap_tut
 devtools::install_local("your_path_of_PolyAseqTrap-master.zip", build_vignettes = TRUE)
 ```
 
+Demo data
+=============
+To facilitate quick testing of different modules of PolyASeqTrap, we provide demo datasets under the [demo_data](https://github.com/APAexplorer/PolyAseqTrap/tree/refer/demo_data) directory. For example, [SRR1168402](https://www.ncbi.nlm.nih.gov/sra/?term=SRR1168402) is provided as a demo poly(dT) reads dataset, and [SRR11837378](https://www.ncbi.nlm.nih.gov/sra/?term=SRR11837378) as a demo poly(dA) reads dataset. The tutorial section of the PolyASeqTrap ([PDF](https://apaexplorer.github.io/PolyAseqTrap/vignettes/PolyAseqTrap_tutorial.pdf), [HTML](https://apaexplorer.github.io/PolyAseqTrap/vignettes/PolyAseqTrap_tutorial.html)) illustrates how to obtain polyA sites from FASTQ files, including trimming, removing polyT/polyA stretches, and aligning reads with STAR. The complete FASTQ files can be downloaded from [NCBI SRA](https://www.ncbi.nlm.nih.gov/sra/).
+
+In addition, we provide demo BAM files for human, mouse, and Arabidopsis. Please refer to the vignette ([PDF](https://apaexplorer.github.io/PolyAseqTrap/vignettes/PolyAseqTrap_tutorial.pdf), [HTML](https://apaexplorer.github.io/PolyAseqTrap/vignettes/PolyAseqTrap_tutorial.html)) for full details.
+
+For the DeepIP module of PolyASeqTrap, demo data are also provided. For full DeepIP resources, please refer to the *[DeepIP_R version](https://github.com/APAexplorer/DeepIP_R)** or **[DeepIP](https://github.com/APAexplorer/DeepIP)** repositories.
+
+
+
 Application examples
 =============
 We evaluated PolyAseqTrap against existing 3' sequencing pipelines using data from 16 different 3' sequencing techniques across multiple species. This comprehensive evaluation demonstrates the effectiveness and robustness of PolyAseqTrap. In this guide, we use demo data from three species—human, mouse, and Arabidopsis to illustrate how PolyAseqTrap can be applied for unified and user-friendly polyA site identification and analysis across different types of 3' sequencing data.
